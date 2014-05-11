@@ -22,4 +22,11 @@ namespace ProjectGit
 
         }
     }
+    public class HelloWorlder
+    {
+        public static void ShowMessage()
+        {
+            MessageBox.Show("Hello, World!");
+        }
+    }
 }
