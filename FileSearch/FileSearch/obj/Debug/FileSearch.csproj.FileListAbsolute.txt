@@ -1,0 +1,9 @@
+c:\users\theerror133\documents\visual studio 2013\Projects\FileSearch\FileSearch\bin\Debug\FileSearch.exe.config
+c:\users\theerror133\documents\visual studio 2013\Projects\FileSearch\FileSearch\bin\Debug\FileSearch.exe
+c:\users\theerror133\documents\visual studio 2013\Projects\FileSearch\FileSearch\bin\Debug\FileSearch.pdb
+c:\users\theerror133\documents\visual studio 2013\Projects\FileSearch\FileSearch\obj\Debug\FileSearch.csprojResolveAssemblyReference.cache
+c:\users\theerror133\documents\visual studio 2013\Projects\FileSearch\FileSearch\obj\Debug\FileSearch.MainForm.resources
+c:\users\theerror133\documents\visual studio 2013\Projects\FileSearch\FileSearch\obj\Debug\FileSearch.Properties.Resources.resources
+c:\users\theerror133\documents\visual studio 2013\Projects\FileSearch\FileSearch\obj\Debug\FileSearch.csproj.GenerateResource.Cache
+c:\users\theerror133\documents\visual studio 2013\Projects\FileSearch\FileSearch\obj\Debug\FileSearch.exe
+c:\users\theerror133\documents\visual studio 2013\Projects\FileSearch\FileSearch\obj\Debug\FileSearch.pdb

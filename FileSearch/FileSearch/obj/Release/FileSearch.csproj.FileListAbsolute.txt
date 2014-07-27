@@ -1,0 +1,18 @@
+C:\Users\TheError133\Documents\Visual Studio 2013\Projects\FileSearch\FileSearch\bin\Release\FileSearch.exe.config
+C:\Users\TheError133\Documents\Visual Studio 2013\Projects\FileSearch\FileSearch\bin\Release\FileSearch.exe
+C:\Users\TheError133\Documents\Visual Studio 2013\Projects\FileSearch\FileSearch\bin\Release\FileSearch.pdb
+C:\Users\TheError133\Documents\Visual Studio 2013\Projects\FileSearch\FileSearch\obj\Release\FileSearch.MainForm.resources
+C:\Users\TheError133\Documents\Visual Studio 2013\Projects\FileSearch\FileSearch\obj\Release\FileSearch.Properties.Resources.resources
+C:\Users\TheError133\Documents\Visual Studio 2013\Projects\FileSearch\FileSearch\obj\Release\FileSearch.csproj.GenerateResource.Cache
+C:\Users\TheError133\Documents\Visual Studio 2013\Projects\FileSearch\FileSearch\obj\Release\FileSearch.exe
+C:\Users\TheError133\Documents\Visual Studio 2013\Projects\FileSearch\FileSearch\obj\Release\FileSearch.pdb
+C:\Users\TheError133\documents\visual studio 2013\Projects\FileSearch\FileSearch\obj\Release\FileSearch.csprojResolveAssemblyReference.cache
+C:\Users\TheError133\Desktop\FileSearch\FileSearch\bin\Release\FileSearch.exe.config
+C:\Users\TheError133\Desktop\FileSearch\FileSearch\obj\Release\FileSearch.exe
+C:\Users\TheError133\Desktop\FileSearch\FileSearch\obj\Release\FileSearch.pdb
+C:\Users\TheError133\Desktop\FileSearch\FileSearch\bin\Release\FileSearch.exe
+C:\Users\TheError133\Desktop\FileSearch\FileSearch\bin\Release\FileSearch.pdb
+C:\Users\TheError133\Desktop\FileSearch\FileSearch\obj\Release\FileSearch.csprojResolveAssemblyReference.cache
+C:\Users\TheError133\Desktop\FileSearch\FileSearch\obj\Release\FileSearch.MainForm.resources
+C:\Users\TheError133\Desktop\FileSearch\FileSearch\obj\Release\FileSearch.Properties.Resources.resources
+C:\Users\TheError133\Desktop\FileSearch\FileSearch\obj\Release\FileSearch.csproj.GenerateResource.Cache
