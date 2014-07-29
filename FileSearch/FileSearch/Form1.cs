@@ -105,17 +105,7 @@ namespace FileSearch
         {
             if (node.GetNodeCount(false) == 0)
             {
-                if (File.Exists(node.FullPath))
-                {
-                    if (IsDirectory(node.FullPath))
-                    {
-                        TreeNode parent;
-                        parent = node.Parent;
-                        treeView1.Nodes.Remove(node);
-                        NodeCheck(parent);
-                    }
-                }
-                else
+                if (!File.Exists(node.FullPath))
                 {
                     TreeNode parent;
                     parent = node.Parent;
