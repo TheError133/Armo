@@ -30,6 +30,7 @@ namespace FileSearch
             NameTemplateText.Text = Properties.Settings.Default.TemplateText;
             FileContentText.Text = Properties.Settings.Default.FileContent;
             CounterText.Text = "0";
+            treeView1.ContextMenuStrip = ContextForTree;
         }
         //Выбор папки поиска
         private void SelectDirectoryButton_Click(object sender, EventArgs e)
@@ -104,8 +105,17 @@ namespace FileSearch
         {
             if (node.GetNodeCount(false) == 0)
             {
-                FileAttributes fa = File.GetAttributes(node.FullPath);
-                if ((fa & FileAttributes.Directory) == FileAttributes.Directory)
+                if (File.Exists(node.FullPath))
+                {
+                    if (IsDirectory(node.FullPath))
+                    {
+                        TreeNode parent;
+                        parent = node.Parent;
+                        treeView1.Nodes.Remove(node);
+                        NodeCheck(parent);
+                    }
+                }
+                else
                 {
                     TreeNode parent;
                     parent = node.Parent;
@@ -119,7 +129,21 @@ namespace FileSearch
                         NodeCheck(trNode);
         }
         //Запуск файлов из дерева результатов
-        private void treeView1_DoubleClick(object sender, EventArgs e)
+        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            try
+            {
+                if (!IsDirectory(treeView1.SelectedNode.FullPath))
+                    Process.Start(treeView1.SelectedNode.FullPath);
+            }
+            catch (NullReferenceException) { }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        //Открытие файла/папки из контекстного меню
+        private void Option_Open_Click(object sender, EventArgs e)
         {
             try
             {
@@ -129,6 +153,32 @@ namespace FileSearch
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+        //Удаление файла из контекстного меню
+        private void Option_Delete_Click(object sender, EventArgs e)
+        {
+            if (IsDirectory(treeView1.SelectedNode.FullPath))
+                MessageBox.Show("Невозможно удалить папку");
+            else
+            {
+                var result = MessageBox.Show("Вы уверены, что хотите удалить " + treeView1.SelectedNode.FullPath, "Удаление", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                    File.Delete(treeView1.SelectedNode.FullPath);
+                NodeCheck(treeView1.Nodes[0]);
+            }
+        }
+        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                treeView1.SelectedNode = e.Node;
+                ContextForTree.Show();
+            }
+        }
+        private bool IsDirectory(string name)
+        {
+            FileAttributes fa = File.GetAttributes(name);
+            return (fa & FileAttributes.Directory) == FileAttributes.Directory;
         }
     }
     //Класс для запуска секундомера

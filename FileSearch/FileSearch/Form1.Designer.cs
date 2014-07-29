@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.DirectoryPathText = new System.Windows.Forms.TextBox();
             this.DirectoryLabel = new System.Windows.Forms.Label();
             this.NameTemplateText = new System.Windows.Forms.TextBox();
@@ -44,6 +45,10 @@
             this.CounterText = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.TimerText = new System.Windows.Forms.TextBox();
+            this.ContextForTree = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Option_Open = new System.Windows.Forms.ToolStripMenuItem();
+            this.Option_Delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.ContextForTree.SuspendLayout();
             this.SuspendLayout();
             // 
             // DirectoryPathText
@@ -113,7 +118,8 @@
             this.treeView1.Size = new System.Drawing.Size(275, 273);
             this.treeView1.TabIndex = 3;
             this.treeView1.TabStop = false;
-            this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_DoubleClick);
+            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
+            this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
             // 
             // StartButton
             // 
@@ -179,6 +185,30 @@
             this.TimerText.TabIndex = 6;
             this.TimerText.TabStop = false;
             // 
+            // ContextForTree
+            // 
+            this.ContextForTree.AccessibleRole = System.Windows.Forms.AccessibleRole.MenuBar;
+            this.ContextForTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Option_Open,
+            this.Option_Delete});
+            this.ContextForTree.Name = "ContextForTree";
+            this.ContextForTree.Size = new System.Drawing.Size(122, 48);
+            this.ContextForTree.Text = "Действия";
+            // 
+            // Option_Open
+            // 
+            this.Option_Open.Name = "Option_Open";
+            this.Option_Open.Size = new System.Drawing.Size(121, 22);
+            this.Option_Open.Text = "Открыть";
+            this.Option_Open.Click += new System.EventHandler(this.Option_Open_Click);
+            // 
+            // Option_Delete
+            // 
+            this.Option_Delete.Name = "Option_Delete";
+            this.Option_Delete.Size = new System.Drawing.Size(121, 22);
+            this.Option_Delete.Text = "Удалить";
+            this.Option_Delete.Click += new System.EventHandler(this.Option_Delete_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -202,6 +232,7 @@
             this.Name = "MainForm";
             this.Text = "File Search";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.ContextForTree.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -225,6 +256,9 @@
         private System.Windows.Forms.TextBox CounterText;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox TimerText;
+        private System.Windows.Forms.ContextMenuStrip ContextForTree;
+        private System.Windows.Forms.ToolStripMenuItem Option_Open;
+        private System.Windows.Forms.ToolStripMenuItem Option_Delete;
     }
 }
 
