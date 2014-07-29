@@ -167,6 +167,7 @@ namespace FileSearch
                 NodeCheck(treeView1.Nodes[0]);
             }
         }
+        //Обработчик клика правой кнопкой по дереву
         private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -175,6 +176,7 @@ namespace FileSearch
                 ContextForTree.Show();
             }
         }
+        //Проверка, является ли выбранный путь папкой
         private bool IsDirectory(string name)
         {
             FileAttributes fa = File.GetAttributes(name);
