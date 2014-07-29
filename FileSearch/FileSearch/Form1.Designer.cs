@@ -44,7 +44,6 @@
             this.CounterText = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.TimerText = new System.Windows.Forms.TextBox();
-            this.StopButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // DirectoryPathText
@@ -114,6 +113,7 @@
             this.treeView1.Size = new System.Drawing.Size(275, 273);
             this.treeView1.TabIndex = 3;
             this.treeView1.TabStop = false;
+            this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_DoubleClick);
             // 
             // StartButton
             // 
@@ -179,17 +179,6 @@
             this.TimerText.TabIndex = 6;
             this.TimerText.TabStop = false;
             // 
-            // StopButton
-            // 
-            this.StopButton.Enabled = false;
-            this.StopButton.Location = new System.Drawing.Point(156, 190);
-            this.StopButton.Name = "StopButton";
-            this.StopButton.Size = new System.Drawing.Size(129, 23);
-            this.StopButton.TabIndex = 3;
-            this.StopButton.Text = "Остановить поиск";
-            this.StopButton.UseVisualStyleBackColor = true;
-            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -199,7 +188,6 @@
             this.Controls.Add(this.CounterText);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CountLabel);
-            this.Controls.Add(this.StopButton);
             this.Controls.Add(this.StartButton);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.SelectDirectoryButton);
@@ -237,7 +225,6 @@
         private System.Windows.Forms.TextBox CounterText;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox TimerText;
-        private System.Windows.Forms.Button StopButton;
     }
 }
 

@@ -16,3 +16,12 @@ C:\Users\TheError133\Desktop\FileSearch\FileSearch\obj\Release\FileSearch.csproj
 C:\Users\TheError133\Desktop\FileSearch\FileSearch\obj\Release\FileSearch.MainForm.resources
 C:\Users\TheError133\Desktop\FileSearch\FileSearch\obj\Release\FileSearch.Properties.Resources.resources
 C:\Users\TheError133\Desktop\FileSearch\FileSearch\obj\Release\FileSearch.csproj.GenerateResource.Cache
+D:\GIT\FileSearch\FileSearch\bin\Release\FileSearch.exe.config
+D:\GIT\FileSearch\FileSearch\obj\Release\FileSearch.exe
+D:\GIT\FileSearch\FileSearch\obj\Release\FileSearch.pdb
+D:\GIT\FileSearch\FileSearch\bin\Release\FileSearch.exe
+D:\GIT\FileSearch\FileSearch\bin\Release\FileSearch.pdb
+D:\GIT\FileSearch\FileSearch\obj\Release\FileSearch.csprojResolveAssemblyReference.cache
+D:\GIT\FileSearch\FileSearch\obj\Release\FileSearch.MainForm.resources
+D:\GIT\FileSearch\FileSearch\obj\Release\FileSearch.Properties.Resources.resources
+D:\GIT\FileSearch\FileSearch\obj\Release\FileSearch.csproj.GenerateResource.Cache

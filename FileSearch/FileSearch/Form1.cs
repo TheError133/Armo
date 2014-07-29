@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
+using System.Diagnostics;
 
 namespace FileSearch
 {
@@ -48,7 +49,6 @@ namespace FileSearch
         //Выполнение поиска
         private void StartButton_Click(object sender, EventArgs e)
         {
-            StopButton.Enabled = true;
             counter = 0;
             if (DirectoryPathText.Text == "")
             {
@@ -74,11 +74,6 @@ namespace FileSearch
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-        //Остановка поиска. Из-за отсутствия работы в реальном времени смысла в данной кнопке нет
-        private void StopButton_Click(object sender, EventArgs e)
-        {
-            treeView1.Refresh();
         }
         //Создание дерева результатов
         private void ListDirectory()
@@ -122,6 +117,18 @@ namespace FileSearch
                 foreach (TreeNode trNode in node.Nodes)
                     if (trNode != null)
                         NodeCheck(trNode);
+        }
+        //Запуск файлов из дерева результатов
+        private void treeView1_DoubleClick(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start(treeView1.SelectedNode.FullPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
     //Класс для запуска секундомера
