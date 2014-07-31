@@ -48,6 +48,7 @@
             this.ContextForTree = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.Option_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.Option_Delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.StopButton = new System.Windows.Forms.Button();
             this.ContextForTree.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -181,7 +182,7 @@
             this.TimerText.Enabled = false;
             this.TimerText.Location = new System.Drawing.Point(156, 257);
             this.TimerText.Name = "TimerText";
-            this.TimerText.Size = new System.Drawing.Size(111, 20);
+            this.TimerText.Size = new System.Drawing.Size(50, 20);
             this.TimerText.TabIndex = 6;
             this.TimerText.TabStop = false;
             // 
@@ -209,11 +210,22 @@
             this.Option_Delete.Text = "Удалить";
             this.Option_Delete.Click += new System.EventHandler(this.Option_Delete_Click);
             // 
+            // StopButton
+            // 
+            this.StopButton.Location = new System.Drawing.Point(163, 190);
+            this.StopButton.Name = "StopButton";
+            this.StopButton.Size = new System.Drawing.Size(136, 23);
+            this.StopButton.TabIndex = 7;
+            this.StopButton.Text = "Остановить поиск";
+            this.StopButton.UseVisualStyleBackColor = true;
+            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(655, 288);
+            this.Controls.Add(this.StopButton);
             this.Controls.Add(this.TimerText);
             this.Controls.Add(this.CounterText);
             this.Controls.Add(this.label1);
@@ -259,6 +271,7 @@
         private System.Windows.Forms.ContextMenuStrip ContextForTree;
         private System.Windows.Forms.ToolStripMenuItem Option_Open;
         private System.Windows.Forms.ToolStripMenuItem Option_Delete;
+        private System.Windows.Forms.Button StopButton;
     }
 }
 

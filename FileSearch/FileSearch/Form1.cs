@@ -1,10 +1,4 @@
-﻿//В итоге реализовать удалось большую часть задачи, однако из-за отсутствия работы в реальном времени
-//динамическая часть программы была утеряна (обработка текущего файла и возможность остановки работы).
-//Были попытки реализовать через async-методы, но возникали проблемы доступа к элементам окна, поскольку
-//обращение к ним происходило из другого потока. Invoke не помог, поскольку он блокирует поток. 
-//BackgroundWorker тоже не помог, потому что изменение прогресса все время работало с нулевым значением
-//самого прогресс-значения, и динамичность при этом терялась.
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,6 +17,7 @@ namespace FileSearch
     {
         private int counter;//Счетчик числа рассмотренных файлов
         private Timer timer;//Секундомер
+        CancellationTokenSource cts;//Токен для прерывания поиска
         public MainForm()
         {
             InitializeComponent();
@@ -48,7 +43,7 @@ namespace FileSearch
             Properties.Settings.Default.Save();
         }
         //Выполнение поиска
-        private void StartButton_Click(object sender, EventArgs e)
+        private async void StartButton_Click(object sender, EventArgs e)
         {
             counter = 0;
             if (DirectoryPathText.Text == "")
@@ -64,8 +59,16 @@ namespace FileSearch
             try
             {
                 timer = new Timer();
-                ListDirectory();
-                TimerText.Text = timer.TimerStop();
+                cts = new CancellationTokenSource();
+                await Task.Factory.StartNew(() =>
+                    {
+                        ListDirectory(true);
+                    }, cts.Token);
+                ListDirectory(false);
+            }
+            catch (OperationCanceledException)
+            {
+                MessageBox.Show("Поиск был прерван");
             }
             catch (NullReferenceException)
             {
@@ -77,26 +80,40 @@ namespace FileSearch
             }
         }
         //Создание дерева результатов
-        private void ListDirectory()
+        private void ListDirectory(bool _async)
         {
-            treeView1.Nodes.Clear();
-            DirectoryInfo rootDirectoryInfo = new DirectoryInfo(DirectoryPathText.Text);
-            treeView1.Nodes.Add(CreateDirectoryNode(rootDirectoryInfo));
-            treeView1.Nodes[0].Text = DirectoryPathText.Text;
-            NodeCheck(treeView1.Nodes[0]);
+            if (_async)
+            {
+                treeView1.BeginInvoke(new Action(() => treeView1.Nodes.Clear()));
+                treeView1.BeginInvoke(new Action<TreeNode>((n) => treeView1.Nodes.Add(n)), CreateDirectoryNode(new DirectoryInfo(DirectoryPathText.Text), 100, cts.Token));
+            }
+            else
+            {
+                counter = 0;
+                treeView1.Nodes.Clear();
+                treeView1.Nodes.Add(CreateDirectoryNode(new DirectoryInfo(DirectoryPathText.Text), 0, cts.Token));
+                treeView1.Nodes[0].Text = DirectoryPathText.Text;
+                NodeCheck(treeView1.Nodes[0]);
+            }
         }
         //Добавление новых узлов в дерево рекурсивно
-        private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo)
+        private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo, int delay, CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
             TreeNode directoryNode = new TreeNode(directoryInfo.Name);
             foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
-                directoryNode.Nodes.Add(CreateDirectoryNode(directory));
+                directoryNode.Nodes.Add(CreateDirectoryNode(directory, delay, token));
             foreach (FileInfo file in directoryInfo.GetFiles(NameTemplateText.Text))
             {
-                FileNameText.Text = file.FullName;
-                CounterText.Text = (++counter).ToString();
+                FileNameText.BeginInvoke(new Action<string>((s) => FileNameText.Text = s), file.FullName);
+                CounterText.BeginInvoke(new Action<string>((s) => CounterText.Text = s), (++counter).ToString());
+                TimerText.BeginInvoke(new Action<string>((s) => TimerText.Text = s), timer.TimerStop());
+                Thread.Sleep(delay);
                 if (File.ReadAllText(file.FullName).Contains(FileContentText.Text))
+                {
                     directoryNode.Nodes.Add(new TreeNode(file.Name));
+                    treeView1.BeginInvoke(new Action(() => treeView1.Refresh()));
+                }
             }
             return directoryNode;
         }
@@ -171,6 +188,10 @@ namespace FileSearch
         {
             FileAttributes fa = File.GetAttributes(name);
             return (fa & FileAttributes.Directory) == FileAttributes.Directory;
+        }
+        private void StopButton_Click(object sender, EventArgs e)
+        {
+            cts.Cancel();
         }
     }
     //Класс для запуска секундомера
