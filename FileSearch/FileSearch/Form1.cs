@@ -72,7 +72,7 @@ namespace FileSearch
             }
             catch (NullReferenceException)
             {
-                FileNameText.Text = "Поиск не дал результатов";
+                MessageBox.Show("Поиск не дал результатов");
             }
             catch (Exception ex)
             {
@@ -97,6 +97,9 @@ namespace FileSearch
             }
         }
         //Добавление новых узлов в дерево рекурсивно
+        //Из-за специфичной структуры элемента TreeView при обработке результатом будет либо готовое дерево со всеми 
+        //записями (при условии, что поиск дошел до конца), либо null. Поэтому при остановке, из-за незавершенного
+        //поиска, получаемый treeView1 имеет значение null.
         private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo, int delay, CancellationToken token)
         {
             token.ThrowIfCancellationRequested();
