@@ -86,6 +86,8 @@ namespace FileSearch
             {
                 treeView1.BeginInvoke(new Action(() => treeView1.Nodes.Clear()));
                 treeView1.BeginInvoke(new Action<TreeNode>((n) => treeView1.Nodes.Add(n)), CreateDirectoryNode(new DirectoryInfo(DirectoryPathText.Text), 100, cts.Token));
+                //treeView1.BeginInvoke(new Action<string>((s) => treeView1.Nodes[0].Text = s), DirectoryPathText.Text);
+                //treeView1.BeginInvoke(new Action(() => NodeCheck(treeView1.Nodes[0])));
             }
             else
             {
@@ -97,27 +99,32 @@ namespace FileSearch
             }
         }
         //Добавление новых узлов в дерево рекурсивно
-        //Из-за специфичной структуры элемента TreeView при обработке результатом будет либо готовое дерево со всеми 
-        //записями (при условии, что поиск дошел до конца), либо null. Поэтому при остановке, из-за незавершенного
-        //поиска, получаемый treeView1 имеет значение null.
+        //Поскольку дерево treeView1 строится снизу вверх (от ветвей к корню), в соответствии с рекурсивным методом CreateDirectoryNode,
+        //то результат будет получен только после окончательного присоединения самой верхней (корневой) ноды к дереву.
+        //Исходя из этого получается, что при прерывании поиска конечного присоединения не происходит, что ведет к пустому дереву
+        //результатов, вследствие того, что метод манипулирует нодами, а не деревом.
+        //Получаемые результаты отображать невозможно по той же причине - на каждом уровне рекурсии единственная получаемая
+        //информация - это путь к файлу/директории и она не имеет никакого отношения к дереву.
         private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo, int delay, CancellationToken token)
         {
-            token.ThrowIfCancellationRequested();
             TreeNode directoryNode = new TreeNode(directoryInfo.Name);
             foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
                 directoryNode.Nodes.Add(CreateDirectoryNode(directory, delay, token));
             foreach (FileInfo file in directoryInfo.GetFiles(NameTemplateText.Text))
-            {
-                FileNameText.BeginInvoke(new Action<string>((s) => FileNameText.Text = s), file.FullName);
-                CounterText.BeginInvoke(new Action<string>((s) => CounterText.Text = s), (++counter).ToString());
-                TimerText.BeginInvoke(new Action<string>((s) => TimerText.Text = s), timer.TimerStop());
-                Thread.Sleep(delay);
-                if (File.ReadAllText(file.FullName).Contains(FileContentText.Text))
+                //try
                 {
-                    directoryNode.Nodes.Add(new TreeNode(file.Name));
-                    treeView1.BeginInvoke(new Action(() => treeView1.Refresh()));
+                    token.ThrowIfCancellationRequested();
+                    FileNameText.BeginInvoke(new Action<string>((s) => FileNameText.Text = s), file.FullName);
+                    CounterText.BeginInvoke(new Action<string>((s) => CounterText.Text = s), (++counter).ToString());
+                    TimerText.BeginInvoke(new Action<string>((s) => TimerText.Text = s), timer.TimerStop());
+                    Thread.Sleep(delay);
+                    if (File.ReadAllText(file.FullName).Contains(FileContentText.Text))
+                        directoryNode.Nodes.Add(new TreeNode(file.Name));
                 }
-            }
+                //catch (OperationCanceledException)
+                //{
+                //    break;
+                //}
             return directoryNode;
         }
         //Проверка узлов в дереве вложенности на лишние (избыточные) папки и их удаление
