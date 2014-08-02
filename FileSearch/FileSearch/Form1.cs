@@ -60,6 +60,7 @@ namespace FileSearch
             {
                 timer = new Timer();
                 cts = new CancellationTokenSource();
+                ResultsListbox.Items.Clear();
                 await Task.Factory.StartNew(() =>
                     {
                         ListDirectory(true);
@@ -119,7 +120,11 @@ namespace FileSearch
                     TimerText.BeginInvoke(new Action<string>((s) => TimerText.Text = s), timer.TimerStop());
                     Thread.Sleep(delay);
                     if (File.ReadAllText(file.FullName).Contains(FileContentText.Text))
+                    {
                         directoryNode.Nodes.Add(new TreeNode(file.Name));
+                        if (delay != 0)
+                            ResultsListbox.BeginInvoke(new Action<string>((s) => ResultsListbox.Items.Add(s)), file.FullName);
+                    }
                 }
                 //catch (OperationCanceledException)
                 //{
