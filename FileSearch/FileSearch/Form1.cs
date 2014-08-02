@@ -208,6 +208,10 @@ namespace FileSearch
         {
             cts.Cancel();
         }
+        private void ResultsListbox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Process.Start(ResultsListbox.SelectedItem.ToString());
+        }
     }
     //Класс для запуска секундомера
     class Timer

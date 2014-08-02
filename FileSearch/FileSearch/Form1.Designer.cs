@@ -50,6 +50,7 @@
             this.Option_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.StopButton = new System.Windows.Forms.Button();
             this.ResultsListbox = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.ContextForTree.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -117,7 +118,7 @@
             // 
             this.treeView1.Location = new System.Drawing.Point(368, 4);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(275, 180);
+            this.treeView1.Size = new System.Drawing.Size(275, 157);
             this.treeView1.TabIndex = 3;
             this.treeView1.TabStop = false;
             this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
@@ -224,16 +225,28 @@
             // ResultsListbox
             // 
             this.ResultsListbox.FormattingEnabled = true;
+            this.ResultsListbox.HorizontalScrollbar = true;
             this.ResultsListbox.Location = new System.Drawing.Point(368, 190);
             this.ResultsListbox.Name = "ResultsListbox";
             this.ResultsListbox.Size = new System.Drawing.Size(275, 82);
             this.ResultsListbox.TabIndex = 8;
+            this.ResultsListbox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ResultsListbox_MouseDoubleClick);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(377, 171);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(106, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Результаты поиска";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(655, 288);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.ResultsListbox);
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.TimerText);
@@ -283,6 +296,7 @@
         private System.Windows.Forms.ToolStripMenuItem Option_Delete;
         private System.Windows.Forms.Button StopButton;
         private System.Windows.Forms.ListBox ResultsListbox;
+        private System.Windows.Forms.Label label2;
     }
 }
 
