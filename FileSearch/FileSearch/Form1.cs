@@ -210,7 +210,11 @@ namespace FileSearch
         }
         private void ResultsListbox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            Process.Start(ResultsListbox.SelectedItem.ToString());
+            try
+            {
+                Process.Start(ResultsListbox.SelectedItem.ToString());
+            }
+            catch (NullReferenceException) { }
         }
     }
     //Класс для запуска секундомера
