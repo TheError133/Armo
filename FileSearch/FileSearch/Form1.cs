@@ -60,95 +60,73 @@ namespace FileSearch
             {
                 timer = new Timer();
                 cts = new CancellationTokenSource();
-                ResultsListbox.Items.Clear();
                 await Task.Factory.StartNew(() =>
                     {
-                        ListDirectory(true);
+                        TreePopulate();
                     }, cts.Token);
-                ListDirectory(false);
             }
             catch (OperationCanceledException)
             {
                 MessageBox.Show("Поиск был прерван");
             }
-            catch (NullReferenceException)
-            {
-                MessageBox.Show("Поиск не дал результатов");
-            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+            if (treeView1.Nodes[0].Nodes.Count == 0)
+                MessageBox.Show("Поиск не дал результатов");
         }
-        //Создание дерева результатов
-        private void ListDirectory(bool _async)
+        //Обработка дерева. Поиск необходимых узлов и добавление новых в требуемых местах
+        private void TreePopulate()
         {
-            if (_async)
+            treeView1.BeginInvoke(new Action(() => treeView1.Nodes.Clear()));
+            treeView1.BeginInvoke(new Action<string>((s) => treeView1.Nodes.Add(s)), DirectoryPathText.Text);
+            DirectoryInfo DI = new DirectoryInfo(DirectoryPathText.Text);
+            foreach (FileInfo file in DI.GetFiles(NameTemplateText.Text, SearchOption.AllDirectories))
             {
-                treeView1.BeginInvoke(new Action(() => treeView1.Nodes.Clear()));
-                treeView1.BeginInvoke(new Action<TreeNode>((n) => treeView1.Nodes.Add(n)), CreateDirectoryNode(new DirectoryInfo(DirectoryPathText.Text), 100, cts.Token));
-                //treeView1.BeginInvoke(new Action<string>((s) => treeView1.Nodes[0].Text = s), DirectoryPathText.Text);
-                //treeView1.BeginInvoke(new Action(() => NodeCheck(treeView1.Nodes[0])));
-            }
-            else
-            {
-                counter = 0;
-                treeView1.Nodes.Clear();
-                treeView1.Nodes.Add(CreateDirectoryNode(new DirectoryInfo(DirectoryPathText.Text), 0, cts.Token));
-                treeView1.Nodes[0].Text = DirectoryPathText.Text;
-                NodeCheck(treeView1.Nodes[0]);
-            }
-        }
-        //Добавление новых узлов в дерево рекурсивно
-        //Поскольку дерево treeView1 строится снизу вверх (от ветвей к корню), в соответствии с рекурсивным методом CreateDirectoryNode,
-        //то результат будет получен только после окончательного присоединения самой верхней (корневой) ноды к дереву.
-        //Исходя из этого получается, что при прерывании поиска конечного присоединения не происходит, что ведет к пустому дереву
-        //результатов, вследствие того, что метод манипулирует нодами, а не деревом.
-        //Получаемые результаты отображать невозможно по той же причине - на каждом уровне рекурсии единственная получаемая
-        //информация - это путь к файлу/директории и она не имеет никакого отношения к дереву.
-        private TreeNode CreateDirectoryNode(DirectoryInfo directoryInfo, int delay, CancellationToken token)
-        {
-            TreeNode directoryNode = new TreeNode(directoryInfo.Name);
-            foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
-                directoryNode.Nodes.Add(CreateDirectoryNode(directory, delay, token));
-            foreach (FileInfo file in directoryInfo.GetFiles(NameTemplateText.Text))
-                //try
+                cts.Token.ThrowIfCancellationRequested();
+                FileNameText.BeginInvoke(new Action<string>((s) => FileNameText.Text = s), file.FullName);
+                CounterText.BeginInvoke(new Action<string>((s) => CounterText.Text = s), (++counter).ToString());
+                TimerText.BeginInvoke(new Action<string>((s) => TimerText.Text = s), timer.TimerStop());
+                //Определение соответствия содержимого файла установленному требованию
+                if (File.ReadAllText(file.FullName).Contains(FileContentText.Text))
                 {
-                    token.ThrowIfCancellationRequested();
-                    FileNameText.BeginInvoke(new Action<string>((s) => FileNameText.Text = s), file.FullName);
-                    CounterText.BeginInvoke(new Action<string>((s) => CounterText.Text = s), (++counter).ToString());
-                    TimerText.BeginInvoke(new Action<string>((s) => TimerText.Text = s), timer.TimerStop());
-                    Thread.Sleep(delay);
-                    if (File.ReadAllText(file.FullName).Contains(FileContentText.Text))
-                    {
-                        directoryNode.Nodes.Add(new TreeNode(file.Name));
-                        if (delay != 0)
-                            ResultsListbox.BeginInvoke(new Action<string>((s) => ResultsListbox.Items.Add(s)), file.FullName);
-                    }
+                    //Массив строк, содержаший элементы пути файла. Необходим для постепенного добавления узлов в дерево
+                    //исключая повторения
+                    string[] PathArray = file.FullName.Replace(DirectoryPathText.Text + "\\", "").Split(Path.DirectorySeparatorChar);
+                    TreeNode node = treeView1.Nodes[0];
+                    //Проверка наличия соответствующего пути узла в дереве
+                    bool contains = true;
+                    int index = 0;
+                    //Если у узла нет потомков мы сразу добавляем весь путь
+                    if (node.Nodes.Count == 0)
+                        treeView1.BeginInvoke(new Action<TreeNode>((n) => n.Nodes.Add(NodeAdd(index, PathArray, n))), node);
+                    else
+                        //Рассматриваем поэтапно все узлы для выявления узла, соответствующего пути, но не имеющего потомков
+                        while (contains)
+                        {
+                            foreach (TreeNode nodes in node.Nodes)
+                                if (nodes.Text == PathArray[index])
+                                {
+                                    index++;
+                                    node = nodes;
+                                    break;
+                                }
+                            //Когда мы наткнемся на узел без потомков, мы добавляем оставшийся путь в дерево
+                            contains = false;
+                            treeView1.BeginInvoke(new Action<TreeNode>((n) => n.Nodes.Add(NodeAdd(index, PathArray, n))), node);
+                        }
                 }
-                //catch (OperationCanceledException)
-                //{
-                //    break;
-                //}
-            return directoryNode;
-        }
-        //Проверка узлов в дереве вложенности на лишние (избыточные) папки и их удаление
-        private void NodeCheck(TreeNode node)
-        {
-            if (node.GetNodeCount(false) == 0)
-            {
-                if (!File.Exists(node.FullPath))
-                {
-                    TreeNode parent;
-                    parent = node.Parent;
-                    treeView1.Nodes.Remove(node);
-                    NodeCheck(parent);
-                }
+                Thread.Sleep(100);
             }
-            else
-                foreach (TreeNode trNode in node.Nodes)
-                    if (trNode != null)
-                        NodeCheck(trNode);
+        }
+        //Добавление узлов в дерево по пути
+        private TreeNode NodeAdd (int index, string[] pathArray, TreeNode node)
+        {
+            TreeNode TN = new TreeNode(pathArray[index]);
+            if (index != pathArray.Length - 1)
+                TN.Nodes.Add(NodeAdd(++index, pathArray, TN));
+            return TN;
         }
         //Запуск файлов из дерева результатов
         private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -189,6 +167,24 @@ namespace FileSearch
                 NodeCheck(treeView1.Nodes[0]);
             }
         }
+        //Проверка узлов в дереве вложенности на лишние (избыточные) папки и их удаление
+        private void NodeCheck(TreeNode node)
+        {
+            if (node.GetNodeCount(false) == 0)
+            {
+                if (!File.Exists(node.FullPath))
+                {
+                    TreeNode parent;
+                    parent = node.Parent;
+                    treeView1.Nodes.Remove(node);
+                    NodeCheck(parent);
+                }
+            }
+            else
+                foreach (TreeNode trNode in node.Nodes)
+                    if (trNode != null)
+                        NodeCheck(trNode);
+        }
         //Обработчик клика правой кнопкой по дереву
         private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
@@ -204,17 +200,10 @@ namespace FileSearch
             FileAttributes fa = File.GetAttributes(name);
             return (fa & FileAttributes.Directory) == FileAttributes.Directory;
         }
+        //Остановка поиска
         private void StopButton_Click(object sender, EventArgs e)
         {
             cts.Cancel();
-        }
-        private void ResultsListbox_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                Process.Start(ResultsListbox.SelectedItem.ToString());
-            }
-            catch (NullReferenceException) { }
         }
     }
     //Класс для запуска секундомера
