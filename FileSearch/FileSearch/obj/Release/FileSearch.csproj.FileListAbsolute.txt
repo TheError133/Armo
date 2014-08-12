@@ -25,3 +25,12 @@ D:\GIT\FileSearch\FileSearch\obj\Release\FileSearch.csprojResolveAssemblyReferen
 D:\GIT\FileSearch\FileSearch\obj\Release\FileSearch.MainForm.resources
 D:\GIT\FileSearch\FileSearch\obj\Release\FileSearch.Properties.Resources.resources
 D:\GIT\FileSearch\FileSearch\obj\Release\FileSearch.csproj.GenerateResource.Cache
+D:\GIT\FileSearch\FileSearch\FileSearch\bin\Release\FileSearch.exe.config
+D:\GIT\FileSearch\FileSearch\FileSearch\obj\Release\FileSearch.exe
+D:\GIT\FileSearch\FileSearch\FileSearch\obj\Release\FileSearch.pdb
+D:\GIT\FileSearch\FileSearch\FileSearch\bin\Release\FileSearch.exe
+D:\GIT\FileSearch\FileSearch\FileSearch\bin\Release\FileSearch.pdb
+D:\GIT\FileSearch\FileSearch\FileSearch\obj\Release\FileSearch.csprojResolveAssemblyReference.cache
+D:\GIT\FileSearch\FileSearch\FileSearch\obj\Release\FileSearch.MainForm.resources
+D:\GIT\FileSearch\FileSearch\FileSearch\obj\Release\FileSearch.Properties.Resources.resources
+D:\GIT\FileSearch\FileSearch\FileSearch\obj\Release\FileSearch.csproj.GenerateResource.Cache

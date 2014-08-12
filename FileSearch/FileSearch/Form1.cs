@@ -105,16 +105,24 @@ namespace FileSearch
                         //Рассматриваем поэтапно все узлы для выявления узла, соответствующего пути, но не имеющего потомков
                         while (contains)
                         {
+                            //Логическая переменная нужна, чтобы определить, был ли найден узел, соответствующий пути
+                            bool checker = false;
                             foreach (TreeNode nodes in node.Nodes)
+                                //Проверка, соответствует ли какой-либо потомок пути у рассматриваемого узла.
+                                //Если это так, то фокус переходит на этого потомка, а массив строк пути переходит на следующий элемент
                                 if (nodes.Text == PathArray[index])
                                 {
                                     index++;
                                     node = nodes;
+                                    checker = true;
                                     break;
                                 }
                             //Когда мы наткнемся на узел без потомков, мы добавляем оставшийся путь в дерево
-                            contains = false;
-                            treeView1.BeginInvoke(new Action<TreeNode>((n) => n.Nodes.Add(NodeAdd(index, PathArray, n))), node);
+                            if (!checker)
+                            {
+                                contains = false;
+                                treeView1.BeginInvoke(new Action<TreeNode>((n) => n.Nodes.Add(NodeAdd(index, PathArray, n))), node);
+                            }
                         }
                 }
                 Thread.Sleep(100);
